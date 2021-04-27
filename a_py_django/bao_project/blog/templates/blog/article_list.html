@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for instant in object_list %}
+<p>{{ instant.id }} - <a href='{{ instant.get_absolute_url }}'>{{ instant.title }}</a></p>
+  <p>
+      {% if instant.content != None and instant.content != '' %}
+        {{ instant.content }}
+      {% else %}
+        content is empty
+      {% endif %}
+  </p>
+  {{ instant.author }}
+
+{% endfor %}
+{% endblock %}

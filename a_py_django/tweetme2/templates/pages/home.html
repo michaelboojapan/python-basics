@@ -1,0 +1,88 @@
+{% extends 'pages/base.html' %}
+
+{% block head_title %}
+HOME
+{% endblock head_title %}
+
+{% block content %}
+<div>
+    <div class="col-md-4 mx-auto col-10">
+        <h1>WELCOME TO TWEET ME 2</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 mx-auto col-10">
+        <form class="form" method="POST" action="/tweets/create/">
+            {% csrf_token %}
+            <div class="d-none alert alert-danger" id="tweet-create-form-error"></div>
+            <input type="hidden" value="/" name="next"/>
+            <textarea required class="form-control" name="content" placeholder="your tweet.."></textarea>
+            <button type="submit" class="btn btn-primary">TWEET</button>
+        </form>
+    </div>
+</div>
+
+<div id="tweets">
+
+</div>
+
+<script>
+    const tweetsElement = document.getElementById("tweets")
+
+    const xhr = new XMLHttpRequest()
+    const method = 'GET'
+    const url = '/tweets'
+    const responseType = 'json'
+
+    xhr.responseType = responseType
+    xhr.open(method, url)
+    xhr.onload = function() {
+        const serverResponse = xhr.response
+        var listedItems = serverResponse
+
+        var finalTweetsStr = ""
+        var i;
+        for (i = 0; i < listedItems.length; i++) {
+            var tweetObj = listedItems[i]
+            var currentItem = formatTweetElement(tweetObj)
+            finalTweetsStr += currentItem
+        }
+        tweetsElement.innerHTML = finalTweetsStr
+    }
+
+    function formatTweetElement(tweet) {
+        var formattedTweet = "<div class='mb-4 tweet' id='tweet-' " + tweet.id +
+            "'> <p>" + tweet.content +
+            likeBtn() +
+            "</p></div>"
+        return formattedTweet
+    }
+
+    function handleDidLike(tweet_id, currentCount) {
+        console.log(tweet_id, currentCount)
+
+        const url = '/tweets/action'
+        const method = 'POST'
+        const data = JSON.stringify({
+            id: tweet_id,
+            action:'like'
+        })
+        const xhr = new XMLHttpRequest()
+        const responseType = 'json'
+        xhr.responseType = responseType
+        xhr.open(method, url)
+        xhr.setRequestHeader("Content-type", "application/json")
+
+        return
+    }
+
+    function likeBtn(tweet) {
+        var formattedTweet = "<button class='btn btn-primary' onclick=handleDidLike(" + tweet.id + "," + tweet.likes + ")>" + tweet.likes + "Like </button>"
+        return formattedTweet
+    }
+
+
+    xhr.send()
+</script>
+
+{% endblock content %}

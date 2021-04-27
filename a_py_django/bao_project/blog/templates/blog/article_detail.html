@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1>In App template : {{ object.title }}</h1>
+  <p>
+      {% if object.content != None and object.content != '' %}
+        {{ object.content }}
+      {% else %}
+        Content is empty
+      {% endif %}
+  </p>
+{{ object.author }}
+{% endblock %}

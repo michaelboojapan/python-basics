@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for instant in object_list %}
+<p>{{ instant.id }} - <a href='{{ instant.get_absolute_url }}'>{{ instant.title }}</a></p>
+  <p>
+      {% if instant.description != None and instant.description != '' %}
+        {{ instant.description }}
+      {% else %}
+        Description Coming Soon
+      {% endif %}
+  </p>
+  {{ instant.price }}
+
+{% endfor %}
+{% endblock %}
